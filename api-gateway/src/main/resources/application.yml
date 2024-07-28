@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: api-gateway
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-ms
+          predicates:
+            - Path=/auth/**, /user/**
+          filters:
+            - RewritePath=/user/(?<segment>.*), /${segment}
+            - RewritePath=/auth/(?<segment>.*), /${segment}
+
+        - id: notification-service
+          uri: lb://notification-ms
+          predicates:
+            - Path=/notification-ms/**
+          filters:
+            - RewritePath=/notification-ms/(?<segment>.*), /${segment}
+
+server:
+  port: 9090
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-users
+      author: Shafag Abdullayeva
+      remarks: "Creating the users table for storing user information."
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: salary
+                  type: double precision
+              - column:
+                  name: account_status
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

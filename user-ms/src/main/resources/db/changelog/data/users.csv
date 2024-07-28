@@ -1,0 +1,4 @@
+id,name,age,region,salary,password,email,account_status
+1,John Doe,30,USA,50000,johndoe123,john.doe@example.com,ENABLED
+2,Jane Smith,25,UK,45000,janesmith123,jane.smith@example.com,ENABLED
+

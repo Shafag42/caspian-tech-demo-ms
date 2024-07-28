@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: DemoTask
+      POSTGRES_PASSWORD: DemoTask_987
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+    networks:
+      - app-network
+
+  user-ms:
+    build:
+      context: ./user-ms
+    container_name: user-ms
+    ports:
+      - "9080:9080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+      SPRING_DATASOURCE_USERNAME: DemoTask
+      SPRING_DATASOURCE_PASSWORD: DemoTask_987
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  notification-ms:
+    build:
+      context: ./notification-ms
+    container_name: notification-ms
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "9090:9090"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

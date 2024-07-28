@@ -1,0 +1,18 @@
+spring:
+  application:
+  name: notification-ms
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+notification:
+  queue:
+    name: notificationQueue
+
+logging:
+  level:
+    root: INFO
+    org.springframework.amqp: DEBUG
+

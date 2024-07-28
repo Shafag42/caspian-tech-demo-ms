@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-load-shipper-users-data
+      author: Shafag Abdullayeva
+      remarks: "Loading data into the users table from the CSV file."
+      changes:
+        - loadData:
+            encoding: UTF-8
+            file: classpath:/data/users.csv
+            tableName: users
+            separator: ","
