@@ -15,6 +15,7 @@ import com.caspiantech.user.ms.model.enums.AccountStatus;
 import com.caspiantech.user.ms.service.AuthService;
 import com.caspiantech.user.ms.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ public class AuthServiceImpl  implements AuthService {
     private  final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserMapper userMapper;
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public void register(RegisterRequest registerRequest) {
@@ -61,11 +63,20 @@ public class AuthServiceImpl  implements AuthService {
                     loginRequest.getEmail(),
                     loginRequest.getPassword()));
         } catch (AuthenticationException e) {
+            String message = "User " + loginRequest.getEmail() + " login uğursuz oldu";
+            rabbitTemplate.convertAndSend("notificationQueue", message);
             throw new UnauthorizedException("Invalid email or password");}
+
         var user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(UserNotFoundException::new);
         var jwt = jwtService.generateAccessToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+
+        // Send login notification message
+        String message = "User " + loginRequest.getEmail() + " login oldu";
+        String notificationQueueName = "notificationQueue";
+        rabbitTemplate.convertAndSend(notificationQueueName, message);
+
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setAccessToken(jwt);
         jwtAuthResponse.setRefreshToken(refreshToken);

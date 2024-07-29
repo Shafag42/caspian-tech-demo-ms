@@ -5,9 +5,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -20,10 +23,14 @@ import java.util.Objects;
 @ToString(callSuper = true, exclude = {"password"})
 @Table(name = "users")
 
-public class UserEntity extends BaseEntity implements UserDetails {
+public class UserEntity implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotBlank
-    @Column(name = "name")  //unique = true
+    @Column(name = "name")
     private String name;
 
     @Column(name = "age")
@@ -47,6 +54,14 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "account_status")
     @Builder.Default
     private AccountStatus accountStatus = AccountStatus.ENABLED;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -82,18 +97,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(age, that.age) &&
-                Objects.equals(region, that.region) &&
-                Objects.equals(salary, that.salary) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(password, that.password);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, age, region, salary,password, email);
+        return Objects.hashCode(id);
     }
+
 }

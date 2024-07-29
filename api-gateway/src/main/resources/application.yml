@@ -9,7 +9,7 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: lb://user-ms
+          uri: http://localhost:9080
           predicates:
             - Path=/auth/**, /user/**
           filters:

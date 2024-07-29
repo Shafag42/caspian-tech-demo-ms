@@ -13,14 +13,15 @@ spring:
 # JPA and Hibernate Configuration
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+    open-in-view: false
     show-sql: true
     properties:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 # Liquibase Configuration
   liquibase:
-    change-log: classpath:db/changelog/changelog-master.yml
+    change-log: classpath:db/changelog/db.changelog-master.yml
 
 # Server Configuration
 server:
@@ -30,28 +31,6 @@ server:
 security:
   jwt:
     secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
-
-# Actuator Configuration
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-  endpoint:
-    prometheus:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-    health:
-      show-details: always
-  info:
-    env:
-      enabled: true
-  metrics:
-    export:
-      prometheus:
-        enabled: true
 
 springdoc:
   swagger-ui:

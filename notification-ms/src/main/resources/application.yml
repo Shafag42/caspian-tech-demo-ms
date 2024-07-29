@@ -7,9 +7,21 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 10s
+          max-attempts: 5
+          max-interval: 15s
+          multiplier: 1
+        missing-queues-fatal: false
+
 notification:
   queue:
     name: notificationQueue
+  dlq:
+    name: notificationDLQ
 
 logging:
   level:

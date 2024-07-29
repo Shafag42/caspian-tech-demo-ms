@@ -8,26 +8,15 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+//    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserDto toUserDto(UserEntity userEntity);
 
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "age", target = "age")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "salary", target = "salary")
-    @Mapping(source = "region", target = "region")
-    @Mapping(source = "password", target = "password")
     UserEntity toUserEntity(UserDto userDto);
 
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "age", target = "age")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "salary", target = "salary")
-    @Mapping(source = "region", target = "region")
-    @Mapping(source = "password", target = "password")
+    @Mapping(target = "id", ignore = true)
     void updateUserEntityFromDto(UserDto userDto, @MappingTarget UserEntity userEntity);
 
 }
