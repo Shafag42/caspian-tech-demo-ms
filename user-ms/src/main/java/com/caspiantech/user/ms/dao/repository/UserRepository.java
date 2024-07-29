@@ -4,6 +4,7 @@ package com.caspiantech.user.ms.dao.repository;
 import com.caspiantech.user.ms.dao.entity.UserEntity;
 import com.caspiantech.user.ms.model.dto.RegionAverageSalaryProjection;
 import com.caspiantech.user.ms.model.enums.AccountStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

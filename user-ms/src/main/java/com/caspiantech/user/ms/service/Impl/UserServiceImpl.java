@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetailsService userDetailsService() {
         return email -> userRepository.findByEmail(email)
-                 .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto updateUser(Long id,UserDto userDto) {
+    public UserDto updateUser(Long id, UserDto userDto) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         // Map userDto properties to userEntity
@@ -99,16 +100,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<UserDto> getUsersInHighestAverageSalaryRegion() {
+    public Page<UserDto> getUsersInHighestAverageSalaryRegion(Pageable pageable) {
         List<RegionAverageSalaryProjection> regionsWithAvgSalary = userRepository.findRegionsWithHighestAverageSalary();
         if (regionsWithAvgSalary.isEmpty()) {
-            return Collections.emptyList();
+            return Page.empty(pageable);
         }
-        String topRegion = regionsWithAvgSalary.get(0).getRegion();
-        List<UserEntity> usersInTopRegion = userRepository.findByRegionIgnoreCaseContaining(topRegion);
-        return usersInTopRegion.stream()
+        List<UserEntity> allUsers = new ArrayList<>();
+        for (RegionAverageSalaryProjection regionProjection : regionsWithAvgSalary) {
+            String region = regionProjection.getRegion();
+            List<UserEntity> usersInRegion = userRepository.findByRegionIgnoreCaseContaining(region);
+            allUsers.addAll(usersInRegion);
+        }
+        List<UserDto> allUsersDto = allUsers.stream()
                 .map(userMapper::toUserDto)
-                .sorted(Comparator.comparingDouble(UserDto::getSalary))
+                .sorted(Comparator.comparingDouble(UserDto::getSalary).reversed())
                 .collect(Collectors.toList());
+
+        // Paginate the results
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allUsersDto.size());
+        List<UserDto> pagedList = allUsersDto.subList(start, end);
+
+        return new PageImpl<>(pagedList, pageable, allUsersDto.size());
     }
 }

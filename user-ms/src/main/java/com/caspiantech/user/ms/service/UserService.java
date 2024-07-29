@@ -28,6 +28,6 @@ public interface  UserService {
     @Transactional
     void delete(Long id);
 
-    List<UserDto> getUsersInHighestAverageSalaryRegion();
+    Page<UserDto> getUsersInHighestAverageSalaryRegion(Pageable pageable);
 }
 

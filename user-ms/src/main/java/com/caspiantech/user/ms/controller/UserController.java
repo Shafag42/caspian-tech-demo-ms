@@ -22,7 +22,6 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @GetMapping("/{userId}")
     public UserDto getUser(@PathVariable Long userId) {
@@ -58,7 +57,9 @@ public class UserController {
     }
 
     @GetMapping("/highest-salary-region")
-    public List<UserDto> getUsersInHighestAverageSalaryRegion() {
-        return userService.getUsersInHighestAverageSalaryRegion();
+    public Page<UserDto> getUsersInHighestAverageSalaryRegion(@RequestParam(defaultValue = "0") int pageNo,
+                                                              @RequestParam(defaultValue = "10") int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return userService.getUsersInHighestAverageSalaryRegion(pageable);
     }
 }
