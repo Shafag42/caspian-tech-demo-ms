@@ -11,7 +11,5 @@ public interface AuthService {
 
     JwtAuthResponse login(LoginRequest loginRequest);
 
-    void logout();
-
     JwtAuthResponse refreshAccessToken(String refreshTokenRequest);
 }

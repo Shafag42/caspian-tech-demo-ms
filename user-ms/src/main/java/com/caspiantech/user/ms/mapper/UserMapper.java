@@ -10,14 +10,8 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
-//    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "id", ignore = true)
     UserDto toUserDto(UserEntity userEntity);
 
-    UserEntity toUserEntity(UserDto userDto);
-
-    @Mapping(target = "id", ignore = true)
     void updateUserEntityFromDto(UserDto userDto, @MappingTarget UserEntity userEntity);
-
 }

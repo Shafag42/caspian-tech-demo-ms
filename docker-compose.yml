@@ -33,6 +33,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: DemoTask_987
     depends_on:
       - postgres
+      - rabbitmq
     networks:
       - app-network
 

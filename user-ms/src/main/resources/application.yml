@@ -13,7 +13,7 @@ spring:
 # JPA and Hibernate Configuration
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     open-in-view: false
     show-sql: true
     properties:
@@ -22,6 +22,12 @@ spring:
 # Liquibase Configuration
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 # Server Configuration
 server:

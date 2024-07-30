@@ -2,15 +2,14 @@ package com.caspiantech.user.ms.model.dto;
 
 
 import com.caspiantech.user.ms.model.enums.AccountStatus;
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @ToString(exclude = {"password"})
 @Builder
 @AllArgsConstructor

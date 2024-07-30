@@ -18,11 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -32,29 +31,29 @@ public class AuthServiceImpl  implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private  final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserMapper userMapper;
     private final RabbitTemplate rabbitTemplate;
+
 
     @Override
     public void register(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new EmailAlreadyExistsException();
         }
-        UserDto userDto = UserDto.builder()
-                .name(registerRequest.getName())
-                .age(registerRequest.getAge())
-                .region(registerRequest.getRegion())
-                .salary(registerRequest.getSalary())
-                .email(registerRequest.getEmail())
-                .accountStatus(AccountStatus.ENABLED)
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .build();
-         System.out.println("UserDto: " + userDto); // Debugging
-        UserEntity userEntity = userMapper.toUserEntity(userDto);
-         System.out.println("User: " + userEntity); // Debugging
-        userRepository.save(userEntity);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName(registerRequest.getName());
+        userEntity.setAge(registerRequest.getAge());
+        userEntity.setRegion(registerRequest.getRegion());
+        userEntity.setSalary(registerRequest.getSalary());
+        userEntity.setEmail(registerRequest.getEmail());
+        userEntity.setAccountStatus(AccountStatus.ENABLED);
+        userEntity.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
+        System.out.println("UserEntity: " + userEntity);
+
+        // UserEntity-ni database-ə qeyd edin
+        userRepository.save(userEntity);
     }
+
 
     @Override
     public JwtAuthResponse login(LoginRequest loginRequest) {
@@ -81,16 +80,6 @@ public class AuthServiceImpl  implements AuthService {
         jwtAuthResponse.setAccessToken(jwt);
         jwtAuthResponse.setRefreshToken(refreshToken);
         return jwtAuthResponse;
-    }
-
-    @Override
-    public void logout() {
-        // Get the current authentication object
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Invalidate the authentication object (sign-out)
-        authentication.setAuthenticated(false);
-        // Clear the security context holder
-        SecurityContextHolder.clearContext();
     }
 
     @Override
