@@ -15,7 +15,7 @@ Caspian Tech Demo MS is a microservices-based application that provides user man
 1. Clone the project repository:
 
    ```bash
-   git clone <your-repository-url>
+   git clone <https://github.com/Shafag42/caspian-tech-demo-ms.git>
    cd caspian-tech-demo-ms
 
 2. Start the services using Docker Compose:
@@ -23,6 +23,13 @@ Caspian Tech Demo MS is a microservices-based application that provides user man
    ```bash
 
    docker-compose up --build
+
+## Tech stack
+
+1. Spring Boot
+2. Java 17
+3. RabbitMQ
+4. PostgreSQL
 
 ## Configuration
 
