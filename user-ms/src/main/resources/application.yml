@@ -5,7 +5,7 @@ spring:
 
 # Database Configuration
   datasource:
-    url: jdbc:postgresql://localhost:5432/user_db
+    url: jdbc:postgresql://postgres:5432/user_db
     username: DemoTask
     password: DemoTask_987
     driver-class-name: org.postgresql.Driver
@@ -24,7 +24,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yml
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest

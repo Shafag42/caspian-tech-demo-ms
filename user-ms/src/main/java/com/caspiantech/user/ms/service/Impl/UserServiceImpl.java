@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // Map userDto properties to userEntity
         logger.info("Before update: {}", userEntity);
         userMapper.updateUserEntityFromDto(userDto, userEntity);
+        userRepository.save(userEntity);
         logger.info("After update: {}", userEntity);
         return userMapper.toUserDto(userEntity);
     }

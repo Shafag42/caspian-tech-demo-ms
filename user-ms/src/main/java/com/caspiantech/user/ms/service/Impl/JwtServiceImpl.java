@@ -24,7 +24,6 @@ public class JwtServiceImpl implements JwtService {
 
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 45; // 45 min
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 5; // 5 days
-    private static final long RESET_TOKEN_EXPIRATION_TIME = 1000 * 60 * 3; // 3 min
 
     private final SecretKey secretKey;
 
@@ -47,12 +46,6 @@ public class JwtServiceImpl implements JwtService {
     public String generateRefreshToken(UserDetails userDetails) {
         checkAuthorization(userDetails);
         return generateToken(userDetails, REFRESH_TOKEN_EXPIRATION_TIME);
-    }
-
-    @Override
-    public String generateResetToken(UserDetails userDetails) {
-        checkAuthorization(userDetails);
-        return generateToken(userDetails, RESET_TOKEN_EXPIRATION_TIME);
     }
 
     private void checkAuthorization(UserDetails userDetails) {

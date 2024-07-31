@@ -48,8 +48,10 @@ dependencies {
 	implementation "org.apache.commons:commons-lang3:${apacheCommonsVersion}"
 
 	// MapStruct
-	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+//	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+//	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	implementation 'org.modelmapper:modelmapper:3.2.1'
+
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
